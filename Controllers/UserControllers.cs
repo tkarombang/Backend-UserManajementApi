@@ -1,6 +1,7 @@
 using Backend_UserManagementApi.Data;
 using Backend_UserManagementApi.DTOs;
 using Backend_UserManagementApi.Models;
+using Backend_UserManagementApi.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,17 @@ namespace Backend_UserManagementApi.Controllers
     public async Task<ActionResult<IEnumerable<UserReadDto>>> GetUsers()
     {
       var users = await _context.Users.ToListAsync();
+      if (users == null || !users.Any())
+      {
+        return NotFound(new ErrorResponse
+        {
+          StatusCode = 404,
+          Message = "Tidak ada Pengguna yang ditemukan",
+          Errors = new List<string> { "DATA PENGGUNA KOSONG" }
+        });
+      }
+
+
       var userDtos = users.Select(u => new UserReadDto
       {
         Id = u.Id,
@@ -30,7 +42,8 @@ namespace Backend_UserManagementApi.Controllers
         NomorTelepon = u.NomorTelepon,
         StatusAktif = u.StatusAktif,
         Departemen = u.Departemen
-      });
+      }).ToList();
+      
       return Ok(userDtos);
     }
 
@@ -41,7 +54,12 @@ namespace Backend_UserManagementApi.Controllers
 
       if (user == null)
       {
-        return NotFound(new { message = "User tidak Ditemukan" });
+        var errorResponse = new ErrorResponse
+        {
+          StatusCode = 404,
+          Message = "User Tidak Ditemukan"
+        };
+        return NotFound(errorResponse);
       }
 
       var userDto = new UserReadDto
@@ -61,6 +79,19 @@ namespace Backend_UserManagementApi.Controllers
     [HttpPost]
     public async Task<ActionResult<UserReadDto>> CreateUser(UserCreateDto dto)
     {
+      if (!ModelState.IsValid)
+      {
+        var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+        var errorResponse = new ErrorResponse
+        {
+          StatusCode = 400,
+          Message = "Validasi gagal",
+          Errors = errors
+        };
+        return BadRequest(errorResponse);
+      }
+
+
       var user = new User
       {
         Nama = dto.Nama,
@@ -89,16 +120,36 @@ namespace Backend_UserManagementApi.Controllers
 
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<UserReadDto>> CreateUser(UserUpdateDto dto)
+    public async Task<ActionResult<UserReadDto>> UpdateUser(int id, UserUpdateDto dto)
     {
-      var user = new User
+      if (!ModelState.IsValid)
       {
-        Nama = dto.Nama,
-        Email = dto.Email,
-        NomorTelepon = dto.NomorTelepon,
-        StatusAktif = dto.StatusAktif,
-        Departemen = dto.Departemen
-      };
+        var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+        var errorResponse = new ErrorResponse
+        {
+          StatusCode = 400,
+          Message = "Validasi gagal",
+          Errors = errors
+        };
+        return BadRequest(errorResponse);
+      }
+
+      var user = await _context.Users.FindAsync(id);
+      if (user == null)
+      {
+        return NotFound(new ErrorResponse
+        {
+          StatusCode = 404,
+          Message = "User Tidak Ditemukan",
+          Errors = new List<string> {"ID Pengguna Tidak ditemukan"}
+        });
+      }
+
+      user.Nama = dto.Nama;
+      user.Email = dto.Email;
+      user.NomorTelepon = dto.NomorTelepon;
+      user.StatusAktif = dto.StatusAktif;
+      user.Departemen = dto.Departemen;
 
       _context.Users.Add(user);
       await _context.SaveChangesAsync();
@@ -113,7 +164,7 @@ namespace Backend_UserManagementApi.Controllers
         Departemen = user.Departemen
       };
 
-      return CreatedAtAction(nameof(GetUser), new { id = user.Id }, readDto);
+      return Ok(readDto);
     }
 
 
@@ -123,7 +174,12 @@ namespace Backend_UserManagementApi.Controllers
       var user = await _context.Users.FindAsync(id);
       if (user == null)
       {
-        return NotFound(new { message = "User tidak ditemukan." });
+        return NotFound(new ErrorResponse
+        {
+          StatusCode = 404,
+          Message = "User Tidak Ditemukan",
+          Errors = new List<string> {"ID Pengguna tidak ditemukan"}
+        });
       }
 
       _context.Users.Remove(user);
