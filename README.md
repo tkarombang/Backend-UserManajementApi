@@ -55,3 +55,27 @@ Aplikasi ini dirancang untuk memungkinkan admin untuk mengelola daftar pengguna 
 ## Dokumentasi API
 
 Swagger akan tersedia di http://localhost:5101/swagger untuk melihat endpoint-endpoint yang ada di backend.
+
+- Contoh Payload JSON    
+    - POST /api/User
+    ```
+    201 Response body  
+        {
+        "nama": "Muhammad Azwar Anas",
+        "email": "muhanaz@example.com",
+        "nomorTelepon": "085159501107",
+        "statusAktif": true,
+        "departemen": "WebDev"
+        }
+    ```
+    - PUT /api/User/{id}
+    ```
+    200 Response body
+        {
+        "nama": "Azwar",
+        "email": "az@example.com",
+        "nomorTelepon": "085159500011",
+        "statusAktif": false,
+        "departemen": "IT"
+        }    
+    ```
