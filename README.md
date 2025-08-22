@@ -1,25 +1,25 @@
 # User Management Application
 
-Aplikasi manajemen user berbasis web dengan backend menggunakan ASP.NET Core dan frontend menggunakan Next.js dan Tailwind CSS.
+Aplikasi manajemen user berbasis web dengan backend menggunakan ASP.NET Core
 
 ## Deskripsi
 
-Aplikasi ini dirancang untuk memungkinkan admin untuk mengelola daftar pengguna (user), termasuk menambah, mengedit, dan menghapus pengguna. Aplikasi ini terdiri dari dua bagian utama:
+Aplikasi ini dirancang untuk memungkinkan admin untuk mengelola daftar pengguna (user), termasuk menambah, mengedit, dan menghapus pengguna. Requirement untuk membangun aplikasi ini:
 
-1. **Backend**: API menggunakan ASP.NET Core untuk menangani data pengguna dan operasi CRUD (Create, Read, Update, Delete).
-2. **Frontend**: Antarmuka pengguna berbasis Next.js dan Tailwind CSS untuk interaksi dengan API.
-
+1. **Backend**: API menggunakan ASP.NET Core untuk menangani data pengguna dan operasi CRUD (Create, Read, Update, Delete) - PostgreSQL database.
+2. **C# (dibaca "C sharp")**: merupaka bahasa pemrograman yang dikembangkan oleh Microsoft sebagai bagian dari platform .NET. C# adalah bahasa berorientasi objek yang dirancang untuk membangun berbagai jenis aplikasi, termasuk aplikasi desktop, web, dan mobile.
+3. **Vscode**: Visual Studio Code (VS Code) adalah editor kode gratis dan open-source yang dikembangkan oleh Microsoft.
+4. **C#, C#-DevKit, .NET Install Tool**: Extension C# adalah ekstensi Visual Studio Code (VS Code) yang menyediakan layanan bahasa dasar untuk C#, seperti intellisense dan debugging.  C# Dev Kit adalah sekumpulan ekstensi VS Code yang dibangun di atas ekstensi C# untuk menyediakan pengalaman pengembangan C# yang lebih kaya, termasuk manajemen solusi, templat, penelusuran kesalahan, dan AI. .NET Install Tool adalah alat yang otomatis terinstal dengan C# Dev Kit untuk memastikan lingkungan pengembangan Anda siap, termasuk alat-alat yang diperlukan untuk .NET. 
 ---
 
 ## Tech Stack
 
 - **Backend**: 
-  - ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-5C2D91?style=flat&logo=.net&logoColor=white) ASP.NET Core
+  - ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-5C2D91?style=flat&logo=.net&logoColor=white)
   - ![Entity Framework Core](https://img.shields.io/badge/Entity_Framework_Core-9B4D96?style=flat&logo=dotnet&logoColor=white)
-  - ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat&logo=sqlite&logoColor=white)
-- **Frontend**: 
-  - ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white) Next.js
-  - ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+  - ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+  - ![Csharp](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
+  - ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white)
 
 ---
 
@@ -28,11 +28,12 @@ Aplikasi ini dirancang untuk memungkinkan admin untuk mengelola daftar pengguna 
 ### 1. Persiapan Project
 - Buka terminal/command prompt dan jalankan perintah berikut untuk membuat project baru:
   ```bash
-  dotnet new webapi -n UserManagementApi
+  dotnet new webapi -n Backend-UserManajementApi
 
 - Masuk Ke folder Project
     ```
-    cd UserManagementApi
+    cd Backend-UserManajementApi
+
 - Install Dependecies
     ```
     dotnet add package Microsoft.EntityFrameworkCore
@@ -79,3 +80,12 @@ Swagger akan tersedia di http://localhost:5101/swagger untuk melihat endpoint-en
         "departemen": "IT"
         }    
     ```
+## Best Practice
+1. **Validation(CreateUser & UpdateUser)**: Jika ada masalah pada model (misalnya tidak valid) controller akan mengembalikan respons BadRequest dengan detail error yang diambil dari ModelState.
+
+2. **DTOs (Data Transfer Object)**: Data yang masuk lebih terkontrol (misalnya client tidak bisa iseng mengirim Id atau field lain yang seharusnya hanya ditentukan server)
+
+3. **Error Handling**: Menambah Class ErrorResponse untuk menangani format response error yang konsisten di seluruh API
+Struktur Response Error = setiap response error menyertakan StatusCode, Message, dan list Errors yang memuat detail masalah.
+
+4. **Auto Mapping**: 
