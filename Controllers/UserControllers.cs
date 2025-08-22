@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend_UserManagementApi.Data;
 using Backend_UserManagementApi.DTOs;
 using Backend_UserManagementApi.Models;
@@ -12,10 +13,12 @@ namespace Backend_UserManagementApi.Controllers
   public class UserController : ControllerBase
   {
     private readonly AppDbContext _context;
+    private readonly IMapper _mapper;
 
-    public UserController(AppDbContext context)
+    public UserController(AppDbContext context, IMapper mapper)
     {
       _context = context;
+      _mapper = mapper;
     }
 
 
@@ -33,17 +36,7 @@ namespace Backend_UserManagementApi.Controllers
         });
       }
 
-
-      var userDtos = users.Select(u => new UserReadDto
-      {
-        Id = u.Id,
-        Nama = u.Nama,
-        Email = u.Email,
-        NomorTelepon = u.NomorTelepon,
-        StatusAktif = u.StatusAktif,
-        Departemen = u.Departemen
-      }).ToList();
-
+      var userDtos = _mapper.Map<List<UserReadDto>>(users);
       return Ok(userDtos);
     }
 
@@ -62,16 +55,7 @@ namespace Backend_UserManagementApi.Controllers
         });
       }
 
-      var userDto = new UserReadDto
-      {
-        Id = user.Id,
-        Nama = user.Nama,
-        Email = user.Email,
-        NomorTelepon = user.NomorTelepon,
-        StatusAktif = user.StatusAktif,
-        Departemen = user.Departemen,
-      };
-
+      var userDto = _mapper.Map<UserReadDto>(user);
       return Ok(userDto);
     }
 
@@ -104,29 +88,11 @@ namespace Backend_UserManagementApi.Controllers
         });
       }
 
-
-      var user = new User
-      {
-        Nama = dto.Nama,
-        Email = dto.Email,
-        NomorTelepon = dto.NomorTelepon,
-        StatusAktif = dto.StatusAktif,
-        Departemen = dto.Departemen
-      };
-
+      var user = _mapper.Map<User>(dto);
       _context.Users.Add(user);
       await _context.SaveChangesAsync();
 
-      var readDto = new UserReadDto
-      {
-        Id = user.Id,
-        Nama = user.Nama,
-        Email = user.Email,
-        NomorTelepon = user.NomorTelepon,
-        StatusAktif = user.StatusAktif,
-        Departemen = user.Departemen
-      };
-
+      var readDto = _mapper.Map<UserReadDto>(user);
       return CreatedAtAction(nameof(GetUser), new { id = user.Id }, readDto);
 
     }
@@ -156,12 +122,7 @@ namespace Backend_UserManagementApi.Controllers
         });
       }
 
-      user.Nama = dto.Nama;
-      user.Email = dto.Email;
-      user.NomorTelepon = dto.NomorTelepon;
-      user.StatusAktif = dto.StatusAktif;
-      user.Departemen = dto.Departemen;
-
+      _mapper.Map(dto, user);
 
       if (!ModelState.IsValid)
       {
@@ -182,15 +143,8 @@ namespace Backend_UserManagementApi.Controllers
       _context.Users.Update(user);
       await _context.SaveChangesAsync();
 
-      var readDto = new UserReadDto
-      {
-        Nama = user.Nama,
-        Email = user.Email,
-        NomorTelepon = user.NomorTelepon,
-        StatusAktif = user.StatusAktif,
-        Departemen = user.Departemen
-      };
 
+      var readDto = _mapper.Map<UserReadDto>(user);
       return Ok(readDto);
     }
 
