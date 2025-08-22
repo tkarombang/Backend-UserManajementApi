@@ -47,7 +47,6 @@ Aplikasi ini dirancang untuk memungkinkan admin untuk mengelola daftar pengguna 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-Swagger akan tersedia pada http://localhost:5000/swagger di environment pengembangan.
 
 - Menjalankan Backend
     ```
@@ -55,4 +54,4 @@ Swagger akan tersedia pada http://localhost:5000/swagger di environment pengemba
 
 ## Dokumentasi API
 
-Swagger akan tersedia di http://localhost:5001/swagger untuk melihat endpoint-endpoint yang ada di backend.
+Swagger akan tersedia di http://localhost:5101/swagger untuk melihat endpoint-endpoint yang ada di backend.
