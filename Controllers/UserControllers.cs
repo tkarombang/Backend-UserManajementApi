@@ -1,4 +1,5 @@
 using Backend_UserManagementApi.Data;
+using Backend_UserManagementApi.DTOs;
 using Backend_UserManagementApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,23 @@ namespace Backend_UserManagementApi.Controllers
 
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetUsers()
     {
-      return await _context.Users.ToListAsync();
+      var users = await _context.Users.ToListAsync();
+      var userDtos = users.Select(u => new UserReadDto
+      {
+        Id = u.Id,
+        Nama = u.Nama,
+        Email = u.Email,
+        NomorTelepon = u.NomorTelepon,
+        StatusAktif = u.StatusAktif,
+        Departemen = u.Departemen
+      });
+      return Ok(userDtos);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(int id)
+    public async Task<ActionResult<UserReadDto>> GetUser(int id)
     {
       var user = await _context.Users.FindAsync(id);
 
@@ -33,48 +44,76 @@ namespace Backend_UserManagementApi.Controllers
         return NotFound(new { message = "User tidak Ditemukan" });
       }
 
-      return user;
+      var userDto = new UserReadDto
+      {
+        Id = user.Id,
+        Nama = user.Nama,
+        Email = user.Email,
+        NomorTelepon = user.NomorTelepon,
+        StatusAktif = user.StatusAktif,
+        Departemen = user.Departemen,
+      };
+
+      return Ok(userDto);
     }
 
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(User user)
+    public async Task<ActionResult<UserReadDto>> CreateUser(UserCreateDto dto)
     {
-      if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+      var user = new User
       {
-        return BadRequest(new { message = "Email Sudah Ada" });
-      }
+        Nama = dto.Nama,
+        Email = dto.Email,
+        NomorTelepon = dto.NomorTelepon,
+        StatusAktif = dto.StatusAktif,
+        Departemen = dto.Departemen
+      };
 
       _context.Users.Add(user);
       await _context.SaveChangesAsync();
-      return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+
+      var readDto = new UserReadDto
+      {
+        Id = user.Id,
+        Nama = user.Nama,
+        Email = user.Email,
+        NomorTelepon = user.NomorTelepon,
+        StatusAktif = user.StatusAktif,
+        Departemen = user.Departemen
+      };
+
+      return CreatedAtAction(nameof(GetUser), new { id = user.Id }, readDto);
+
     }
 
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateUser(int id, User user)
+    public async Task<ActionResult<UserReadDto>> CreateUser(UserUpdateDto dto)
     {
-      if (id != user.Id)
+      var user = new User
       {
-        return BadRequest(new { message = "ID User Tidak Sesuai" });
-      }
+        Nama = dto.Nama,
+        Email = dto.Email,
+        NomorTelepon = dto.NomorTelepon,
+        StatusAktif = dto.StatusAktif,
+        Departemen = dto.Departemen
+      };
 
-      var existingUser = await _context.Users.FindAsync(id);
-      if (existingUser == null)
-      {
-        return NotFound(new { message = "User tidak Ditemukan" });
-      }
-
-      existingUser.Nama = user.Nama;
-      existingUser.Email = user.Email;
-      existingUser.NomorTelepon = user.NomorTelepon;
-      existingUser.StatusAktif = user.StatusAktif;
-      existingUser.Departemen = user.Departemen;
-
+      _context.Users.Add(user);
       await _context.SaveChangesAsync();
 
+      var readDto = new UserReadDto
+      {
+        Id = user.Id,
+        Nama = user.Nama,
+        Email = user.Email,
+        NomorTelepon = user.NomorTelepon,
+        StatusAktif = user.StatusAktif,
+        Departemen = user.Departemen
+      };
 
-      return Ok(existingUser);
+      return CreatedAtAction(nameof(GetUser), new { id = user.Id }, readDto);
     }
 
 
