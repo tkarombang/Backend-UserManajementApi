@@ -53,3 +53,6 @@ Swagger akan tersedia pada http://localhost:5000/swagger di environment pengemba
     ```
     dotnet run
 
+## Dokumentasi API
+
+Swagger akan tersedia di http://localhost:5001/swagger untuk melihat endpoint-endpoint yang ada di backend.

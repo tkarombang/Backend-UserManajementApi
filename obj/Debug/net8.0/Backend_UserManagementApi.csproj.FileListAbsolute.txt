@@ -103,3 +103,4 @@ D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\obj\Debug\net8
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\obj\Debug\net8.0\Backend_UserManagementApi.pdb
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\obj\Debug\net8.0\Backend_UserManagementApi.genruntimeconfig.cache
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\obj\Debug\net8.0\ref\Backend_UserManagementApi.dll
+D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\obj\Debug\net8.0\Backend_UserManagementApi.sourcelink.json
