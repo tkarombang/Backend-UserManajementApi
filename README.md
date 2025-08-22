@@ -89,3 +89,60 @@ Swagger akan tersedia di http://localhost:5101/swagger untuk melihat endpoint-en
 Struktur Response Error = setiap response error menyertakan StatusCode, Message, dan list Errors yang memuat detail masalah.
 
 4. **AutoMapper**: yang akan mempermudah untuk memetakan antara entitas model (seperti User) dan objek DTO (seperti UserReadDto, UserCreateDto, dan UserUpdateDto). Dengan AutoMapper, tidak perlu lagi melakukan mapping manual satu per satu properti seperti sebelumnya.
+
+
+
+## Instruksi Pengoperasian (Operating Instructions)
+### 1. Meng-clone Repository
+Untuk mulai menggunakan aplikasi, langkah pertama adalah meng-clone repository dari GitHub ke komputer Anda. Jalankan perintah berikut di terminal atau command prompt:
+
+```bash
+git clone https://github.com/tkarombang/Backend-UserManajementApi.git
+```
+### 2. Masuk ke Folder Project
+Setelah repository berhasil di-clone, masuk ke folder project menggunakan perintah cd:
+```bash
+cd repository-name
+```
+
+### 3. Install Dependencies
+Setelah masuk ke folder project, pastikan semua dependencies yang diperlukan terinstall. Jalankan perintah berikut untuk menambahkan dependencies yang dibutuhkan oleh aplikasi:
+```bash
+dotnet restore
+```
+### 4. Menjalankan Aplikasi
+Setelah dependencies terinstall, jalankan aplikasi menggunakan perintah:
+```bash
+dotnet run
+```
+Aplikasi akan berjalan di http://localhost:5101.
+
+### 5. Mengakses API melalui Swagger
+Buka browser dan kunjungi http://localhost:5101/swagger. Anda akan melihat antarmuka Swagger yang memungkinkan Anda untuk mengakses berbagai endpoint yang tersedia di backend.
+
+### 6. Melakukan Operasi CRUD
+Tambah User: Gunakan endpoint POST /api/User untuk menambahkan pengguna baru. Isi data yang diperlukan seperti nama, email, nomor telepon, status aktif, dan departemen.
+
+Edit User: Gunakan endpoint PUT /api/User/{id} untuk mengupdate data pengguna berdasarkan ID. Anda bisa mengubah nama, email, dan detail lainnya.
+
+Hapus User: Gunakan endpoint DELETE /api/User/{id} untuk menghapus pengguna berdasarkan ID.
+
+Lihat Daftar Pengguna: Gunakan endpoint GET /api/User untuk melihat daftar seluruh pengguna.
+
+### 7. Menambahkan Data ke Database
+Pastikan Anda telah mengkonfigurasi database PostgreSQL dengan benar. Anda bisa menggunakan tools seperti pgAdmin untuk memverifikasi dan mengelola data dalam database.
+
+---
+
+
+## Kontak
+
+Jika Anda memiliki pertanyaan atau ingin berkontribusi, silakan hubungi saya melalui GitHub atau kirim email ke [tuangkarombang@gmail.com].
+
+## Terima Kasih
+
+Terima kasih telah menggunakan aplikasi ini! Jangan ragu untuk membuka *issues* di GitHub jika Anda menemukan bug atau memiliki saran fitur.
+
+---
+
+> **Note:** Jika Anda merasa aplikasi ini bermanfaat, jangan lupa untuk memberikan ⭐ pada repository ini di GitHub! 😊
