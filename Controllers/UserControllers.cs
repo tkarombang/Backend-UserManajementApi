@@ -43,7 +43,7 @@ namespace Backend_UserManagementApi.Controllers
         StatusAktif = u.StatusAktif,
         Departemen = u.Departemen
       }).ToList();
-      
+
       return Ok(userDtos);
     }
 
@@ -54,12 +54,12 @@ namespace Backend_UserManagementApi.Controllers
 
       if (user == null)
       {
-        var errorResponse = new ErrorResponse
+        return NotFound(new ErrorResponse
         {
           StatusCode = 404,
-          Message = "User Tidak Ditemukan"
-        };
-        return NotFound(errorResponse);
+          Message = "User yang Kamu Cari Tidak Ada",
+          Errors = ["cari ID Yang lain"]
+        });
       }
 
       var userDto = new UserReadDto
@@ -81,14 +81,27 @@ namespace Backend_UserManagementApi.Controllers
     {
       if (!ModelState.IsValid)
       {
-        var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
-        var errorResponse = new ErrorResponse
+        var errors = ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
+
+        return BadRequest(new ErrorResponse
         {
           StatusCode = 400,
           Message = "Validasi gagal",
           Errors = errors
-        };
-        return BadRequest(errorResponse);
+        });
+      }
+
+      if (_context.Users.Any(e => e.Email == dto.Email))
+      {
+        return BadRequest(new ErrorResponse
+        {
+          StatusCode = 400,
+          Message = "Email Sudah Terdaftar",
+          Errors = ["Pakai Email yang lain"]
+        });
       }
 
 
@@ -122,26 +135,24 @@ namespace Backend_UserManagementApi.Controllers
     [HttpPut("{id}")]
     public async Task<ActionResult<UserReadDto>> UpdateUser(int id, UserUpdateDto dto)
     {
-      if (!ModelState.IsValid)
-      {
-        var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
-        var errorResponse = new ErrorResponse
-        {
-          StatusCode = 400,
-          Message = "Validasi gagal",
-          Errors = errors
-        };
-        return BadRequest(errorResponse);
-      }
-
       var user = await _context.Users.FindAsync(id);
       if (user == null)
       {
         return NotFound(new ErrorResponse
         {
           StatusCode = 404,
-          Message = "User Tidak Ditemukan",
-          Errors = new List<string> {"ID Pengguna Tidak ditemukan"}
+          Message = "Tidak ada Pengguna Yang ingin diUbah",
+          Errors = ["ID Pengguna Tidak ditemukan"]
+        });
+      }
+
+      if (_context.Users.Any(u => u.Email == dto.Email && u.Id != id))
+      {
+        return BadRequest(new ErrorResponse
+        {
+          StatusCode = 400,
+          Message = "Validasi Gagal",
+          Errors = ["Email sudah terdaftar.."]
         });
       }
 
@@ -151,12 +162,28 @@ namespace Backend_UserManagementApi.Controllers
       user.StatusAktif = dto.StatusAktif;
       user.Departemen = dto.Departemen;
 
-      _context.Users.Add(user);
+
+      if (!ModelState.IsValid)
+      {
+        var errors = ModelState.Values
+          .SelectMany(v => v.Errors)
+          .Select(e => e.ErrorMessage)
+          .ToList();
+
+        return BadRequest(new ErrorResponse
+        {
+          StatusCode = 400,
+          Message = "Validasi gagal",
+          Errors = errors
+        });
+      }
+
+
+      _context.Users.Update(user);
       await _context.SaveChangesAsync();
 
       var readDto = new UserReadDto
       {
-        Id = user.Id,
         Nama = user.Nama,
         Email = user.Email,
         NomorTelepon = user.NomorTelepon,
@@ -177,8 +204,8 @@ namespace Backend_UserManagementApi.Controllers
         return NotFound(new ErrorResponse
         {
           StatusCode = 404,
-          Message = "User Tidak Ditemukan",
-          Errors = new List<string> {"ID Pengguna tidak ditemukan"}
+          Message = "Kamu Menghapus Pengguna yang tidak ada",
+          Errors = ["ID Pengguna tidak ditemukan"]
         });
       }
 
