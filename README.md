@@ -88,4 +88,4 @@ Swagger akan tersedia di http://localhost:5101/swagger untuk melihat endpoint-en
 3. **Error Handling**: Menambah Class ErrorResponse untuk menangani format response error yang konsisten di seluruh API
 Struktur Response Error = setiap response error menyertakan StatusCode, Message, dan list Errors yang memuat detail masalah.
 
-4. **Auto Mapping**: 
+4. **AutoMapper**: yang akan mempermudah untuk memetakan antara entitas model (seperti User) dan objek DTO (seperti UserReadDto, UserCreateDto, dan UserUpdateDto). Dengan AutoMapper, tidak perlu lagi melakukan mapping manual satu per satu properti seperti sebelumnya.
