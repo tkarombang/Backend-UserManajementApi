@@ -4,17 +4,47 @@ using Backend_UserManagementApi.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
+// Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+if(connectionString != null && connectionString.StartWith("postgres://"))
+{
+    try
+    {
+        var databaseUri = new Uri(connectionString);
+        var userInfo = databaseUri.UserInfo.Split(':');
+        
+        var updatedConnectionString = new NpgsqlConnectionStringBuilder
+        {
+            Host = databaseUri.Host,
+            Port = databaseUri.Port,
+            Username = userInfo[0],
+            Password = userInfo[1],
+            Database = databaseUri.LocalPath.TrimStart('/'),
+            SslMode = SslMode.Require,
+            TrustServerCertificate = true
+        }.ToString();
+        
+        connectionString = updatedConnectionString;
+    }
+    catch (Exception ex)
+    {
+         Console.WriteLine($"Error parsing DATABASE_URL: {ex.Message}");
+    }
+}
+
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<MappingProfile>();
 }, typeof(Program).Assembly);
 
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionString)));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -32,7 +62,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
 

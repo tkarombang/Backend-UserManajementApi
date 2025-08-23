@@ -132,6 +132,37 @@ Lihat Daftar Pengguna: Gunakan endpoint GET /api/User untuk melihat daftar selur
 ### 7. Menambahkan Data ke Database
 Pastikan Anda telah mengkonfigurasi database PostgreSQL dengan benar. Anda bisa menggunakan tools seperti pgAdmin untuk memverifikasi dan mengelola data dalam database.
 
+### 8. Struktur Folder
+
+```
+UserManagementApi/
+│── Controllers/
+│   └── UsersController.cs      # Endpoint CRUD user
+│
+│── Data/
+│   └── AppDbContext.cs         # DbContext untuk EF Core
+|
+│── DTOs/
+│   └── UserCreateDto.cs        # DTO untuk create user
+│   └── UserReadDto.cs          # DTO untuk menemukan user
+│   └── UserUpdateDto.cs        # DTO untuk update user
+|
+│── Migrations/                 # Folder auto-generated EF Core
+│
+│── Models/
+│   └── Response                
+|   │   └── ErrorResponse.cs    # Error Handling
+│   └── User.cs                 # Entity User
+│
+│── Profiles/
+│   └── MappingProfiles.cs      # AutoMapper properti
+│
+│
+│── Program.cs                  # Entry point ASP.NET
+│── appsettings.json            # Konfigurasi database, logging, dll
+│── Backend_UserManagementApi.csproj            
+
+```
 ---
 
 
