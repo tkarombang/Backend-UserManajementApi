@@ -13,7 +13,14 @@ RUN dotnet publish "Backend_UserManagementApi.csproj" -c Release -o /app/publish
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+
 COPY --from=build /app/publish .
+
+RUN ls -la
+ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://+:8080
+ENV PORT=8080
+
 EXPOSE 8080
+
 ENTRYPOINT ["dotnet", "Backend_UserManagementApi.dll"]
