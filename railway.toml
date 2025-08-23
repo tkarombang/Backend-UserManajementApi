@@ -1,5 +1,10 @@
 [build]
 builder = "NIXPACKS"
 
+[env]
+DOTNET_CLI_TELEMETRY_OPTOUT = "1"
+DOTNET_SKIP_FIRST_TIME_EXPERIENCE = "true"
+DOTNET_ROOT = "/usr/share/dotnet"
+
 [deploy]
-startCommand = "dotnet Backend_UserManagementApi.dll"
+startCommand = "dotnet /app/out/Backend_UserManagementApi.dll"
