@@ -1,29 +1,19 @@
-# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy project file and restore
-COPY ["Backend_UserManagementApi.csproj", "."]
-RUN dotnet restore
+# Copy project file
+COPY ["Backend_UserManagementApi.csproj", "./"]
+RUN dotnet restore "Backend_UserManagementApi.csproj"
 
-# Copy everything else and build
+# Copy everything else
 COPY . .
-RUN dotnet build -c Release --no-restore
-RUN dotnet publish -c Release -o /app/publish --no-restore
+RUN dotnet build "Backend_UserManagementApi.csproj" -c Release -o /app/build
+RUN dotnet publish "Backend_UserManagementApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Runtime stage  
+# Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-
-# Environment variables
-ENV ASPNETCORE_ENVIRONMENT=Production
-ENV DOTNET_RUNNING_IN_CONTAINER=true
-ENV ASPNETCORE_URLS=http://+:8080
-
-EXPOSE 8080
-
-# Copy published files
 COPY --from=build /app/publish .
-
-# Perhatikan nama DLL yang sesuai
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "Backend_UserManagementApi.dll"]
