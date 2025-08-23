@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Backend_UserManagementApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9cd9d77a4b7ee1449fcca996fec7ab2cee4ae16b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8ad4218913d05201459704d9b4db2ba5c91428dd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Backend_UserManagementApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Backend_UserManagementApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
