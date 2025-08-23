@@ -6,10 +6,10 @@ WORKDIR /app
 COPY . .
 
 # Publish aplikasi
-RUN dotnet publish "Backend_UserManagementApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "Backend_UserManagementApi.csproj" -c Release -o out
 
 # Tahap 2: Jalankan aplikasi
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build-env /app/publish .
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "Backend_UserManagementApi.dll"]
