@@ -1,26 +1,25 @@
+RUN echo "=== LISTING APP FILES ==="
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy project file
-COPY ["Backend_UserManagementApi.csproj", "./"]
-RUN dotnet restore "Backend_UserManagementApi.csproj"
-
-# Copy everything else
 COPY . .
-RUN dotnet build "Backend_UserManagementApi.csproj" -c Release -o /app/build
-RUN dotnet publish "Backend_UserManagementApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
+
+# Copy dari folder publish yang benar
+RUN ls -la
 COPY --from=build /app/publish .
 
-RUN ls -la
-ENV ASPNETCORE_ENVIRONMENT=Production
+# Debug: List files untuk verifikasi
+RUN echo "Contents of /app:" && ls -la
+RUN echo "=== CHECK DLL EXISTS ==="
+
 ENV ASPNETCORE_URLS=http://+:8080
 ENV PORT=8080
-
-EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "Backend_UserManagementApi.dll"]

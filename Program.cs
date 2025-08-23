@@ -66,6 +66,9 @@ app.MapControllers();
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
+Console.WriteLine($"Starting application on port: {port}");
+Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
+
 
 app.Run();
 
