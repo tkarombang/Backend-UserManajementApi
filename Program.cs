@@ -1,7 +1,6 @@
 using Backend_UserManagementApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Backend_UserManagementApi.Profiles;
-using System;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
