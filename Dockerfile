@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build-ENV
 WORKDIR /app
 
 COPY ["Backend_UserManagementApi.csproj", "./"]
-RUN dotnet restore "Backend_UserManagementApi.csproj"
+RUN dotnet restore 
 
 COPY . .
 RUN dotnet publish -c Release -o out
