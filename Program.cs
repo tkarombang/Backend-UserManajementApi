@@ -5,13 +5,21 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection");
-
+var connectionString = "";
 Console.WriteLine($"[DEBUG] Connection String: {connectionString}");
 
-if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(connectionString))
+if (builder.Environment.IsProduction())
 {
-    connectionString += ";Ssl Mode=Require";
+    var uriString = Environment.GetEnvironmentVariable("DATABASE_URL");
+    if (!string.IsNullOrEmpty(uriString))
+    {
+        var uri = new Uri(uriString);
+        connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.Segments.Last()};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};Ssl Mode=Require";
+    }
+}
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 }
 
 // string? connectionString;
@@ -34,6 +42,10 @@ if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(connectionString
 // }
 
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<MappingProfile>();
@@ -44,8 +56,6 @@ builder.Services.AddAutoMapper(config =>
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
 // builder.Services.AddDbContext<AppDbContext>(options =>
 //     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
