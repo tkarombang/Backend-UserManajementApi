@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Backend_UserManagementApi.Profiles;
 using Npgsql;
 
-var builder = WebApplication.CreateBuilder(args);
+
+    var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = "";
-Console.WriteLine($"[DEBUG] Connection String: {connectionString}");
+
 
 if (builder.Environment.IsProduction())
 {
@@ -21,6 +22,7 @@ else
 {
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 }
+Console.WriteLine($"[DEBUG] Connection String: {connectionString}");
 
 // string? connectionString;
 
@@ -63,6 +65,13 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
 
 app.MapGet("/", () => "Wellcome in My Server");
 
