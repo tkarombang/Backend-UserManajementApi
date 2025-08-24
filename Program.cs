@@ -4,23 +4,25 @@ using Backend_UserManagementApi.Profiles;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = "";
 
 
-if (builder.Environment.IsProduction())
-{
-    var host = Environment.GetEnvironmentVariable("PGHOST");
-    var port = Environment.GetEnvironmentVariable("PGPORT");
-    var database = Environment.GetEnvironmentVariable("PGDATABASE");
-    var user = Environment.GetEnvironmentVariable("PGUSER");
-    var password = Environment.GetEnvironmentVariable("PGPASSWORD");
 
-    connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};Ssl Mode=Require";
-}
-else
-{
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-}
+// if (builder.Environment.IsProduction())
+// {
+//     var host = Environment.GetEnvironmentVariable("PGHOST");
+//     var port = Environment.GetEnvironmentVariable("PGPORT");
+//     var database = Environment.GetEnvironmentVariable("PGDATABASE");
+//     var user = Environment.GetEnvironmentVariable("PGUSER");
+//     var password = Environment.GetEnvironmentVariable("PGPASSWORD");
+
+//     connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};Ssl Mode=Require";
+// }
+// else
+// {
+//     connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// }
+
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddAutoMapper(config =>
 {
@@ -33,7 +35,9 @@ builder.Services.AddAutoMapper(config =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
