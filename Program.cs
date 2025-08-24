@@ -16,7 +16,7 @@ if (builder.Environment.IsProduction())
     var host = Environment.GetEnvironmentVariable("PGHOST");
     var port = Environment.GetEnvironmentVariable("PGPORT");
     var database = Environment.GetEnvironmentVariable("PGDATABASE");
-    var user = Environment.GetEnvironmentVariable("PGUSER");
+    var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
     var password = Environment.GetEnvironmentVariable("PGPASSWORD");
 
     connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};Ssl Mode=Require";
