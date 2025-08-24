@@ -1,7 +1,6 @@
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\publish\web.config
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\appsettings.Development.json
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\appsettings.json
-D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\appsettings.Production.json
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\publish\appsettings.Development.json
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\publish\appsettings.json
 D:\mini-lemons\fullstack-manajemen-user\Backend_UserManagementApi\bin\Debug\net8.0\publish\Backend_UserManagementApi.deps.json

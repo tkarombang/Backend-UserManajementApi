@@ -4,8 +4,7 @@ using Backend_UserManagementApi.Profiles;
 using Npgsql;
 
 
-    var builder = WebApplication.CreateBuilder(args);
-
+var builder = WebApplication.CreateBuilder(args);
 var connectionString = "";
 
 
@@ -24,25 +23,6 @@ else
 }
 Console.WriteLine($"[DEBUG] Connection String: {connectionString}");
 
-// string? connectionString;
-
-
-
-// if (builder.Environment.IsProduction())
-// {
-//     var host = Environment.GetEnvironmentVariable("PGHOST");
-//     var port = Environment.GetEnvironmentVariable("PGPORT");
-//     var database = Environment.GetEnvironmentVariable("PGDATABASE");
-//     var user = Environment.GetEnvironmentVariable("PGUSER");
-//     var password = Environment.GetEnvironmentVariable("PGPASSWORD");
-
-//     connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};Ssl Mode=Require";
-// }
-// else
-// {
-//     connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// }
-
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -58,22 +38,23 @@ builder.Services.AddAutoMapper(config =>
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
 
+// AUTO-MIGRATION IN Railway - START
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
 }
+// AUTO-MIGRATION IN Railway - END
 
 app.MapGet("/", () => "Wellcome in My Server");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -86,11 +67,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-
-// var port = Environment.GetEnvironmentVariable("PORT") ?? "5101";
-// app.Urls.Add($"http://0.0.0.0:{port}");
-
-// Console.WriteLine($"Starting application on port: {port}");
+// DEBUG Lokasi Environment
 Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
 
 
