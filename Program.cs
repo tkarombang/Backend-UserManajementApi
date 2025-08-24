@@ -7,6 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
+Console.WriteLine($"[DEBUG] Connection String: {connectionString}");
+
+if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(connectionString))
+{
+    connectionString += ";Ssl Mode=Require";
+}
+
 // string? connectionString;
 
 
