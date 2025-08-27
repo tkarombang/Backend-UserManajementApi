@@ -77,7 +77,7 @@ if (app.Environment.IsProduction())
 {
     app.UseCors(policy =>
     {
-        policy.WithOrigins("backend-usermanajementapi-production.up.railway.app")
+        policy.WithOrigins("https://frontend-management-user-a-pi.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
