@@ -43,9 +43,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -73,8 +73,21 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+{
+    app.UseCors(policy =>
+    {
+        policy.WithOrigins("backend-usermanajementapi-production.up.railway.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+}
+else
+{
+    app.UseCors("AllowLocalhost");
+}
+
 app.UseHttpsRedirection();
-app.UseCors("AllowLocalhost");
 app.UseAuthorization();
 app.MapControllers();
 
